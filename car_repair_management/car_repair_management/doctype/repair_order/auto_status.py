@@ -42,10 +42,10 @@ def check_and_complete_ro(ro):
     })
     
     if open_tasks == 0:
-        ro.status = "Completed"
+        ro.status = "Ready for Handover"
         ro.flags.ignore_validate_update_after_submit = True
         ro.save(ignore_permissions=True)
-        frappe.msgprint(f"Repair Order {ro.name} status updated to Completed", alert=True, indicator="green")
+        frappe.msgprint(f"Repair Order {ro.name} status updated to Ready for Handover", alert=True, indicator="green")
 
 
 def update_ro_status_from_sales_invoice(si_doc, method=None):
@@ -66,9 +66,9 @@ def update_ro_status_from_sales_invoice(si_doc, method=None):
     if ro.status in ("Delivered", "Closed", "Cancelled"):
         return
     
-    # Auto transition: Completed -> Invoiced when SI is submitted
-    if si_doc.docstatus == 1 and ro.status == "Completed":
-        ro.status = "Invoiced"
+    # Auto transition: Ready for Handover -> Delivered when SI is submitted
+    if si_doc.docstatus == 1 and ro.status == "Ready for Handover":
+        ro.status = "Delivered"
         ro.flags.ignore_validate_update_after_submit = True
         ro.save(ignore_permissions=True)
-        frappe.msgprint(f"Repair Order {ro.name} status updated to Invoiced", alert=True, indicator="green")
+        frappe.msgprint(f"Repair Order {ro.name} status updated to Delivered", alert=True, indicator="green")

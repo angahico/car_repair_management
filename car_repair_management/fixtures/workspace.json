@@ -961,6 +961,7 @@
     "url": "/app/repair-order?status=On+Hold"
    }
   ],
-  "title": "Workshop"
+  "title": "Workshop",
+  "type": "Workspace"
  }
 ]

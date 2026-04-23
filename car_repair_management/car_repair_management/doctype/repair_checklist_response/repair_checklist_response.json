@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "check_item",
+  "type",
   "value",
   "notes",
   "passed"
@@ -13,9 +14,17 @@
  "fields": [
   {
    "fieldname": "check_item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Check Item",
+   "options": "Handover Checklist Item"
+  },
+  {
+   "fieldname": "type",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Check Item"
+   "label": "Type",
+   "read_only": 1
   },
   {
    "fieldname": "value",

@@ -1,0 +1,194 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2026-02-14 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "title",
+  "vehicle",
+  "inspection_date",
+  "inspection_type",
+  "column_break_basic",
+  "form_template",
+  "inspector",
+  "result",
+  "score",
+  "status",
+  "section_findings",
+  "findings",
+  "notes",
+  "section_follow_up",
+  "follow_up_required",
+  "follow_up_due_date",
+  "follow_up_assigned_to",
+  "column_break_follow_up",
+  "linked_work_order",
+  "handover_checklist_item",
+  "failures_count"
+ ],
+ "fields": [
+  {
+   "default": "VI-.YYYY.-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "VI-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "vehicle",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Vehicle",
+   "options": "Vehicle",
+   "reqd": 1
+  },
+  {
+   "fieldname": "inspection_date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Inspection Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "inspection_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Inspection Type",
+   "options": "Pre-Trip\nPost-Trip\nPeriodic\nAd-Hoc\nRegulatory",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_basic",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "form_template",
+   "fieldtype": "Link",
+   "label": "Form Template",
+   "options": "Inspection Form Template"
+  },
+  {
+   "fieldname": "inspector",
+   "fieldtype": "Link",
+   "label": "Inspector",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "result",
+   "fieldtype": "Select",
+   "label": "Result",
+   "options": "\nPass\nConditional\nFail"
+  },
+  {
+   "fieldname": "score",
+   "fieldtype": "Percent",
+   "label": "Score"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nIn Progress\nCompleted\nCancelled",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_findings",
+   "fieldtype": "Section Break",
+   "label": "Findings"
+  },
+  {
+   "fieldname": "findings",
+   "fieldtype": "Text Editor",
+   "label": "Findings"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "section_follow_up",
+   "fieldtype": "Section Break",
+   "label": "Follow Up"
+  },
+  {
+   "default": "0",
+   "fieldname": "follow_up_required",
+   "fieldtype": "Check",
+   "label": "Follow Up Required"
+  },
+  {
+   "fieldname": "follow_up_due_date",
+   "fieldtype": "Date",
+   "label": "Follow Up Due Date"
+  },
+  {
+   "fieldname": "follow_up_assigned_to",
+   "fieldtype": "Link",
+   "label": "Follow Up Assigned To",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_follow_up",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "linked_work_order",
+   "fieldtype": "Link",
+   "label": "Linked Work Order",
+   "options": "Repair Order"
+  },
+  {
+   "fieldname": "handover_checklist_item",
+   "fieldtype": "Link",
+   "label": "Handover Checklist Item",
+   "options": "Handover Checklist Item"
+  },
+  {
+   "default": "0",
+   "fieldname": "failures_count",
+   "fieldtype": "Int",
+   "label": "Failures Count",
+   "read_only": 1
+  }
+ ],
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-03-16 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Car Repair Management",
+ "name": "Vehicle Inspection",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "System Manager",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "All"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

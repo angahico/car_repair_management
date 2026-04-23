@@ -9,6 +9,8 @@
   "naming_series",
   "amended_from",
   "status",
+  "order_for",
+  "company",
   "customer",
   "vehicle",
   "intake_channel",
@@ -17,6 +19,9 @@
   "priority",
   "sla_response_by",
   "sla_delivery_by",
+  "expected_delivery_datetime",
+  "entry_datetime",
+  "sla_template",
   "project",
   "service_template",
   "quotation",
@@ -70,12 +75,30 @@
    "reqd": 1
   },
   {
+   "default": "Customer",
+   "fieldname": "order_for",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Order For",
+   "options": "Customer\nCompany",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.order_for=='Company'",
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "mandatory_depends_on": "eval:doc.order_for=='Company'",
+   "options": "Company"
+  },
+  {
+   "depends_on": "eval:doc.order_for=='Customer'",
    "fieldname": "customer",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Customer",
-   "options": "Customer",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.order_for=='Customer'",
+   "options": "Customer"
   },
   {
    "fieldname": "vehicle",
@@ -117,8 +140,24 @@
    "fieldname": "sla_delivery_by",
    "fieldtype": "Datetime",
    "label": "SLA Delivery By"
-  },
-  {
+   },
+   {
+   "fieldname": "expected_delivery_datetime",
+   "fieldtype": "Datetime",
+   "label": "Expected Delivery"
+   },
+   {
+   "fieldname": "entry_datetime",
+   "fieldtype": "Datetime",
+   "label": "Entry Date/Time"
+   },
+   {
+   "fieldname": "sla_template",
+   "fieldtype": "Link",
+   "label": "SLA Template",
+   "options": "SLA Template"
+   },
+   {
    "allow_on_submit": 1,
    "fieldname": "project",
    "fieldtype": "Link",

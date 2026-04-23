@@ -1,0 +1,171 @@
+{
+ "actions": [],
+ "autoname": "field:template_name",
+ "creation": "2026-03-11 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "template_name",
+  "enabled",
+  "description",
+  "section_conditions",
+  "priority",
+  "intake_channel",
+  "service_template",
+  "section_sla_targets",
+  "response_time_hours",
+  "resolution_time_hours",
+  "response_time_jinja",
+  "resolution_time_jinja",
+  "section_escalation",
+  "escalation_after_hours",
+  "escalate_to",
+  "section_jinja_help",
+  "jinja_help_html"
+ ],
+ "fields": [
+  {
+   "fieldname": "template_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Template Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "section_conditions",
+   "fieldtype": "Section Break",
+   "label": "Matching Conditions"
+  },
+  {
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "label": "Priority",
+   "options": "\nLow\nNormal\nHigh\nUrgent"
+  },
+  {
+   "fieldname": "intake_channel",
+   "fieldtype": "Select",
+   "label": "Intake Channel",
+   "options": "\nWalk-in\nWeb Intake\nPhone\nPartner"
+  },
+  {
+   "fieldname": "service_template",
+   "fieldtype": "Link",
+   "label": "Service Template",
+   "options": "Service Template"
+  },
+  {
+   "fieldname": "section_sla_targets",
+   "fieldtype": "Section Break",
+   "label": "SLA Targets"
+  },
+  {
+   "description": "Fixed response SLA in hours. Leave blank to use Jinja expression.",
+   "fieldname": "response_time_hours",
+   "fieldtype": "Float",
+   "label": "Response Time (Hours)"
+  },
+  {
+   "description": "Fixed resolution SLA in hours. Leave blank to use Jinja expression.",
+   "fieldname": "resolution_time_hours",
+   "fieldtype": "Float",
+   "label": "Resolution Time (Hours)"
+  },
+  {
+   "description": "Jinja template that evaluates to hours. Available variables: doc, priority, intake_channel, operations_count, total_planned_minutes",
+   "fieldname": "response_time_jinja",
+   "fieldtype": "Code",
+   "label": "Response Time (Jinja Expression)",
+   "options": "Jinja"
+  },
+  {
+   "description": "Jinja template that evaluates to hours. Available variables: doc, priority, intake_channel, operations_count, total_planned_minutes",
+   "fieldname": "resolution_time_jinja",
+   "fieldtype": "Code",
+   "label": "Resolution Time (Jinja Expression)",
+   "options": "Jinja"
+  },
+  {
+   "fieldname": "section_escalation",
+   "fieldtype": "Section Break",
+   "label": "Escalation"
+  },
+  {
+   "description": "Hours after SLA breach to escalate",
+   "fieldname": "escalation_after_hours",
+   "fieldtype": "Float",
+   "label": "Escalate After (Hours)"
+  },
+  {
+   "fieldname": "escalate_to",
+   "fieldtype": "Link",
+   "label": "Escalate To",
+   "options": "User"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_jinja_help",
+   "fieldtype": "Section Break",
+   "label": "Jinja Template Help"
+  },
+  {
+   "fieldname": "jinja_help_html",
+   "fieldtype": "HTML",
+   "label": "Jinja Help",
+   "options": "<div class='alert alert-info'><h5>Available Jinja Variables</h5><ul><li><code>doc</code> - The Repair Order document</li><li><code>priority</code> - Priority level (Low, Normal, High, Urgent)</li><li><code>intake_channel</code> - Intake channel</li><li><code>operations_count</code> - Number of operations</li><li><code>total_planned_minutes</code> - Total planned time in minutes</li></ul><h5>Examples</h5><pre>{% if priority == 'Urgent' %}2{% elif priority == 'High' %}4{% else %}8{% endif %}</pre><pre>{{ (total_planned_minutes / 60) * 1.5 }}</pre></div>"
+  }
+ ],
+ "links": [],
+ "modified": "2026-03-11 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Car Repair Management",
+ "name": "SLA Template",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "System Manager",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Maintenance Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Maintenance User",
+   "share": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,2 @@
+const a={Draft:{label:"Draft",variant:"default"},Scheduled:{label:"Scheduled",variant:"info"},"In Progress":{label:"In Progress",variant:"primary"},"Awaiting Parts":{label:"Awaiting Parts",variant:"warning"},"Ready for Handover":{label:"Ready",variant:"success"},Delivered:{label:"Delivered",variant:"success"},Closed:{label:"Closed",variant:"default"},"On Hold":{label:"On Hold",variant:"warning"},Cancelled:{label:"Cancelled",variant:"danger"}},e={Low:"default",Normal:"info",High:"warning",Urgent:"danger"};export{e as P,a as R};
+//# sourceMappingURL=index-0e8a89f1.js.map

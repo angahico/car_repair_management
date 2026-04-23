@@ -10,7 +10,8 @@
   "planned_minutes",
   "assigned_to",
   "workstation",
-  "is_qc"
+  "is_qc",
+  "status"
  ],
  "fields": [
   {
@@ -21,8 +22,9 @@
   },
   {
    "fieldname": "operation_name",
-   "fieldtype": "Data",
-   "label": "Operation Name"
+   "fieldtype": "Link",
+   "label": "Operation Name",
+   "options": "Operation"
   },
   {
    "fieldname": "planned_minutes",
@@ -46,11 +48,19 @@
    "fieldname": "is_qc",
    "fieldtype": "Check",
    "label": "Is QC"
+  },
+  {
+   "default": "Open",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Open\nWorking\nPending Review\nCompleted\nRejected\nCancelled"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2025-10-29 09:58:18.751610",
+ "modified": "2026-03-16 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Car Repair Management",
  "name": "Repair Operation Line",

@@ -54,6 +54,10 @@ doc_events = {
     "Task": {
         "on_update": "car_repair_management.car_repair_management.doctype.repair_order.auto_status.update_ro_status_from_task",
     },
+    "Vehicle": {
+        "validate": "car_repair_management.overrides.vehicle.validate",
+        "on_update": "car_repair_management.overrides.vehicle.on_update",
+    }
 }
 
 # Whitelisted methods exposure (explicit mapping, though not required)
@@ -64,19 +68,22 @@ override_whitelisted_methods = {
 
 # Scheduler
 scheduler_events = {
+    "hourly": [
+        "car_repair_management.tasks.execute_scheduled_reports"
+    ],
     "daily": [
         "car_repair_management.tasks.update_job_costing_snapshots"
     ]
 }
 
 # Installation hooks
-# Run custom field creation and dashboard links
-after_install = "car_repair_management.install.create_customizations"
+# Run custom field creation, dashboard links, and seed demo data
+after_install = "car_repair_management.install.after_install"
 
 # Fixtures: export workspace, charts, number cards, reports under our module
 fixtures = [
     {"doctype": "Workspace", "filters": [["module", "=", "Car Repair Management"]]},
-    {"doctype": "Dashboard Chart", "filters": [["module", "=", "Car Repair Management"], ["is_standard", "=", 0]]},
+    {"doctype": "Dashboard Chart", "filters": [["module", "=", "Car Repair Management"]]},
     {"doctype": "Number Card", "filters": [["module", "=", "Car Repair Management"]]},
     {"doctype": "Report", "filters": [["module", "=", "Car Repair Management"]]},
     {"doctype": "Custom Field", "filters": [["module", "=", "Car Repair Management"]]},
@@ -87,4 +94,9 @@ fixtures = [
 override_doctype_dashboards = {
     "Vehicle": "car_repair_management.overrides.vehicle_dashboard.get_data"
 }
+
+# Website route for frontend SPA
+website_route_rules = [
+    {"from_route": "/workshop/<path:app_path>", "to_route": "workshop"},
+]
 

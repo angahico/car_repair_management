@@ -1,0 +1,209 @@
+{
+  "actions": [],
+  "autoname": "hash",
+  "creation": "2026-04-10 00:00:00.000000",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "vehicle",
+    "refuel_date",
+    "driver",
+    "odometer_reading",
+    "column_break_1",
+    "liters",
+    "cost_per_liter",
+    "total_cost",
+    "fuel_station",
+    "section_break_quota",
+    "quota_link",
+    "consumed_before",
+    "consumed_after",
+    "is_over_quota",
+    "over_quota_liters",
+    "section_break_approval",
+    "approval_status",
+    "dept_head_approved_by",
+    "dept_head_approved_on",
+    "depot_manager_approved_by",
+    "depot_manager_approved_on",
+    "rejection_reason",
+    "section_break_notes",
+    "notes"
+  ],
+  "fields": [
+    {
+      "fieldname": "vehicle",
+      "fieldtype": "Link",
+      "label": "Vehicle",
+      "options": "Vehicle",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "refuel_date",
+      "fieldtype": "Date",
+      "label": "Refuel Date",
+      "reqd": 1,
+      "default": "Today",
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "driver",
+      "fieldtype": "Link",
+      "label": "Driver",
+      "options": "Employee"
+    },
+    {
+      "fieldname": "odometer_reading",
+      "fieldtype": "Float",
+      "label": "Odometer Reading"
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "liters",
+      "fieldtype": "Float",
+      "label": "Liters",
+      "reqd": 1,
+      "precision": 2,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "cost_per_liter",
+      "fieldtype": "Currency",
+      "label": "Cost per Liter",
+      "precision": 2
+    },
+    {
+      "fieldname": "total_cost",
+      "fieldtype": "Currency",
+      "label": "Total Cost",
+      "read_only": 1,
+      "precision": 2,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "fuel_station",
+      "fieldtype": "Data",
+      "label": "Fuel Station"
+    },
+    {
+      "fieldname": "section_break_quota",
+      "fieldtype": "Section Break",
+      "label": "Quota Details"
+    },
+    {
+      "fieldname": "quota_link",
+      "fieldtype": "Link",
+      "label": "Fuel Quota",
+      "options": "Vehicle Fuel Quota"
+    },
+    {
+      "fieldname": "consumed_before",
+      "fieldtype": "Float",
+      "label": "Consumed Before",
+      "read_only": 1
+    },
+    {
+      "fieldname": "consumed_after",
+      "fieldtype": "Float",
+      "label": "Consumed After",
+      "read_only": 1
+    },
+    {
+      "fieldname": "is_over_quota",
+      "fieldtype": "Check",
+      "label": "Is Over Quota",
+      "read_only": 1
+    },
+    {
+      "fieldname": "over_quota_liters",
+      "fieldtype": "Float",
+      "label": "Over Quota Liters",
+      "read_only": 1
+    },
+    {
+      "fieldname": "section_break_approval",
+      "fieldtype": "Section Break",
+      "label": "Approval"
+    },
+    {
+      "fieldname": "approval_status",
+      "fieldtype": "Select",
+      "label": "Approval Status",
+      "options": "Approved\nPending Dept Head Approval\nPending Depot Manager Approval\nDept Head Approved\nRejected",
+      "default": "Approved",
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "dept_head_approved_by",
+      "fieldtype": "Link",
+      "label": "Dept Head Approved By",
+      "options": "Employee",
+      "read_only": 1
+    },
+    {
+      "fieldname": "dept_head_approved_on",
+      "fieldtype": "Datetime",
+      "label": "Dept Head Approved On",
+      "read_only": 1
+    },
+    {
+      "fieldname": "depot_manager_approved_by",
+      "fieldtype": "Link",
+      "label": "Depot Manager Approved By",
+      "options": "Employee",
+      "read_only": 1
+    },
+    {
+      "fieldname": "depot_manager_approved_on",
+      "fieldtype": "Datetime",
+      "label": "Depot Manager Approved On",
+      "read_only": 1
+    },
+    {
+      "fieldname": "rejection_reason",
+      "fieldtype": "Small Text",
+      "label": "Rejection Reason"
+    },
+    {
+      "fieldname": "section_break_notes",
+      "fieldtype": "Section Break",
+      "label": "Notes"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Notes"
+    }
+  ],
+  "is_calendar_view": 0,
+  "links": [],
+  "modified": "2026-04-10 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Car Repair Management",
+  "name": "Vehicle Refueling Record",
+  "naming_rule": "Random",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "Fleet Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 1
+}

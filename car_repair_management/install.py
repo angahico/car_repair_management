@@ -2,9 +2,119 @@ import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 
-def after_install():
-    create_customizations()
+def _ensure_asset_master_data():
+    """Ensure Asset Category and fixed-asset Item exist for vehicle asset creation."""
+    # Asset Category: Vehicles
+    if not frappe.db.exists("Asset Category", "Vehicles"):
+        try:
+            company = frappe.defaults.get_global_default("company")
+            fixed_asset_acct = frappe.db.get_value("Account", {
+                "company": company, "account_name": "Capital Equipments", "is_group": 0
+            }, "name")
+            if not fixed_asset_acct:
+                fixed_asset_acct = frappe.db.get_value("Account", {
+                    "company": company, "parent_account": ["like", "%Fixed Asset%"], "is_group": 0
+                }, "name")
+            depreciation_acct = frappe.db.get_value("Account", {
+                "company": company, "account_name": "Depreciation", "is_group": 0
+            }, "name")
+            accum_dep_acct = frappe.db.get_value("Account", {
+                "company": company, "account_name": "Accumulated Depreciation", "is_group": 0
+            }, "name")
 
+            cat_data = {
+                "doctype": "Asset Category",
+                "asset_category_name": "Vehicles",
+                "enable_cwip_accounting": 0,
+            }
+            if fixed_asset_acct and depreciation_acct and accum_dep_acct:
+                cat_data["accounts"] = [{
+                    "company_name": company,
+                    "fixed_asset_account": fixed_asset_acct,
+                    "accumulated_depreciation_account": accum_dep_acct,
+                    "depreciation_expense_account": depreciation_acct,
+                }]
+            cat = frappe.get_doc(cat_data)
+            cat.insert(ignore_permissions=True)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), "Car Repair Management: Asset Category")
+
+    # Fixed-asset Item: VEHICLE-ASSET
+    if not frappe.db.exists("Item", "VEHICLE-ASSET"):
+        try:
+            item_group = "All Item Groups"
+            if frappe.db.exists("Item Group", "Fixed Asset"):
+                item_group = "Fixed Asset"
+            item = frappe.get_doc({
+                "doctype": "Item",
+                "item_code": "VEHICLE-ASSET",
+                "item_name": "Vehicle (Fixed Asset)",
+                "item_group": item_group,
+                "is_fixed_asset": 1,
+                "is_stock_item": 0,
+                "asset_category": "Vehicles",
+            })
+            item.insert(ignore_permissions=True)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), "Car Repair Management: Vehicle Asset Item")
+
+
+def after_install():
+    create_doctypes()
+    _ensure_asset_master_data()
+    create_customizations()
+    # Seed demo data on fresh install
+    try:
+        from car_repair_management.demo_data import seed_demo_data
+        seed_demo_data()
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "Car Repair Management: Demo data seeding")
+
+
+
+def create_doctypes():
+    def create_custom_doctype(name, fields, module="Car Repair Management"):
+        if frappe.db.exists("DocType", name):
+            return
+        
+        doc = frappe.get_doc({
+            "doctype": "DocType",
+            "name": name,
+            "module": module,
+            "custom": 1,
+            "autoname": "hash",
+            "naming_rule": "Random",
+            "fields": fields,
+            "permissions": [{"role": "System Manager", "read": 1, "write": 1, "create": 1, "delete": 1}]
+        })
+        doc.insert(ignore_permissions=True)
+
+    # 1. Vehicle Location
+    create_custom_doctype("Vehicle Location", [
+        {"fieldname": "vehicle", "label": "Vehicle", "fieldtype": "Link", "options": "Vehicle", "reqd": 1, "in_list_view": 1},
+        {"fieldname": "timestamp", "label": "Timestamp", "fieldtype": "Datetime", "reqd": 1, "in_list_view": 1},
+        {"fieldname": "latitude", "label": "Latitude", "fieldtype": "Float"},
+        {"fieldname": "longitude", "label": "Longitude", "fieldtype": "Float"},
+        {"fieldname": "direction", "label": "Direction (Bearing)", "fieldtype": "Float"},
+        {"fieldname": "speed", "label": "Speed", "fieldtype": "Float"}
+    ])
+
+    # 2. Vehicle Fuel Level
+    create_custom_doctype("Vehicle Fuel Level", [
+        {"fieldname": "vehicle", "label": "Vehicle", "fieldtype": "Link", "options": "Vehicle", "reqd": 1, "in_list_view": 1},
+        {"fieldname": "timestamp", "label": "Timestamp", "fieldtype": "Datetime", "reqd": 1, "in_list_view": 1},
+        {"fieldname": "fuel_level", "label": "Fuel Level (%)", "fieldtype": "Percent", "reqd": 1, "in_list_view": 1},
+        {"fieldname": "location", "label": "Location", "fieldtype": "Link", "options": "Vehicle Location"}
+    ])
+
+    # 3. Vehicle Sensor Data
+    create_custom_doctype("Vehicle Sensor Data", [
+        {"fieldname": "vehicle", "label": "Vehicle", "fieldtype": "Link", "options": "Vehicle", "reqd": 1, "in_list_view": 1},
+        {"fieldname": "timestamp", "label": "Timestamp", "fieldtype": "Datetime", "reqd": 1, "in_list_view": 1},
+        {"fieldname": "sensor_type", "label": "Sensor Type", "fieldtype": "Data", "reqd": 1, "in_list_view": 1},
+        {"fieldname": "value", "label": "Value", "fieldtype": "Data", "reqd": 1},
+        {"fieldname": "unit", "label": "Unit", "fieldtype": "Data"}
+    ])
 
 def create_customizations():
     # Custom Fields definitions
@@ -13,12 +123,40 @@ def create_customizations():
             dict(fieldname="variant", label="Variant", fieldtype="Data", insert_after="model"),
             dict(fieldname="year", label="Year", fieldtype="Int", insert_after="variant"),
             dict(fieldname="transmission", label="Transmission", fieldtype="Select", options="Manual\nAutomatic\nCVT", insert_after="year"),
-            dict(fieldname="odometer_at_last_service", label="Odometer at Last Service", fieldtype="Int", insert_after="transmission"),
+            dict(fieldname="acquisition_cost", label="Acquisition Cost", fieldtype="Currency", insert_after="transmission"),
+            dict(fieldname="engine_type", label="Engine Type", fieldtype="Data", insert_after="acquisition_date"),
+            dict(fieldname="engine_capacity", label="Engine Capacity (cc)", fieldtype="Int", insert_after="engine_type"),
+            dict(fieldname="cylinders", label="Cylinders", fieldtype="Int", insert_after="engine_capacity"),
+            dict(fieldname="drivetrain", label="Drivetrain", fieldtype="Data", insert_after="cylinders"),
+            dict(fieldname="engine_number", label="Engine Number", fieldtype="Data", insert_after="drivetrain"),
+            dict(fieldname="vehicle_type", label="Vehicle Type", fieldtype="Data", insert_after="engine_number"),
+            dict(fieldname="country_of_origin", label="Country of Origin", fieldtype="Data", insert_after="vehicle_type"),
+            dict(fieldname="fuel_tank_capacity", label="Fuel Tank Capacity", fieldtype="Data", insert_after="country_of_origin"),
+            dict(fieldname="battery_capacity", label="Battery Capacity", fieldtype="Data", insert_after="fuel_tank_capacity"),
+            dict(fieldname="seating_capacity", label="Seating Capacity", fieldtype="Int", insert_after="battery_capacity"),
+            dict(fieldname="payload_capacity", label="Payload Capacity", fieldtype="Data", insert_after="seating_capacity"),
+            dict(fieldname="towing_capacity", label="Towing Capacity", fieldtype="Data", insert_after="payload_capacity"),
+            dict(fieldname="gross_vehicle_weight", label="Gross Vehicle Weight (GVW)", fieldtype="Data", insert_after="towing_capacity"),
+            dict(fieldname="ownership_type", label="Ownership Type", fieldtype="Data", insert_after="gross_vehicle_weight"),
+            dict(fieldname="registration_authority", label="Registration Authority", fieldtype="Data", insert_after="ownership_type"),
+            dict(fieldname="registration_expiry", label="Registration Expiry", fieldtype="Date", insert_after="registration_authority"),
+            dict(fieldname="insurance_policy", label="Insurance Policy Ref", fieldtype="Data", insert_after="registration_expiry"),
+            dict(fieldname="insurance_expiry", label="Insurance Expiry", fieldtype="Date", insert_after="insurance_policy"),
+            dict(fieldname="insured_value", label="Insured Value", fieldtype="Currency", insert_after="insurance_expiry"),
+            dict(fieldname="insurance_start_date", label="Insurance Start Date", fieldtype="Date", insert_after="insured_value"),
+            dict(fieldname="comprehensive_insurance", label="Comprehensive Insurance", fieldtype="Data", insert_after="insurance_start_date"),
+            dict(fieldname="odometer_at_last_service", label="Odometer at Last Service", fieldtype="Int", insert_after="comprehensive_insurance"),
             dict(fieldname="last_service_date", label="Last Service Date", fieldtype="Date", insert_after="odometer_at_last_service", read_only=1),
             dict(fieldname="next_service_due_date", label="Next Service Due Date", fieldtype="Date", insert_after="last_service_date", read_only=1),
             dict(fieldname="jobs_count", label="Jobs Count", fieldtype="Int", insert_after="next_service_due_date", read_only=1),
             dict(fieldname="repair_cost_to_date", label="Repair Cost To Date", fieldtype="Currency", insert_after="jobs_count", read_only=1),
             dict(fieldname="revenue_billed_to_date", label="Revenue Billed To Date", fieldtype="Currency", insert_after="repair_cost_to_date", read_only=1),
+            dict(fieldname="erpnext_asset", label="Linked Asset", fieldtype="Link", options="Asset", insert_after="revenue_billed_to_date", read_only=1),
+            dict(fieldname="depreciation_method", label="Depreciation Method", fieldtype="Select", options="\nStraight Line\nDouble Declining Balance\nWritten Down Value", insert_after="erpnext_asset"),
+            dict(fieldname="depreciation_months", label="Useful Life (Months)", fieldtype="Int", insert_after="depreciation_method", default="60"),
+        ],
+        "Asset": [
+            dict(fieldname="vehicle", label="Vehicle", fieldtype="Link", options="Vehicle", insert_after="asset_name"),
         ],
         "Quotation": [
             dict(fieldname="custom_repair_order", label="Repair Order", fieldtype="Link", options="Repair Order", insert_after="customer", print_hide=1),
@@ -40,6 +178,11 @@ def create_customizations():
         "Quotation Item": [
             dict(fieldname="repair_order", label="Repair Order", fieldtype="Link", options="Repair Order", insert_after="item_code", hidden=1),
             dict(fieldname="vehicle", label="Vehicle", fieldtype="Link", options="Vehicle", insert_after="repair_order", hidden=1),
+        ],
+        "Repair Order": [
+            dict(fieldname="entry_datetime", label="Entry Date/Time", fieldtype="Datetime", insert_after="intake_channel"),
+            dict(fieldname="entry_datetime_editable", label="Edit Entry Date/Time", fieldtype="Check", insert_after="entry_datetime"),
+            dict(fieldname="expected_delivery_datetime", label="Expected Delivery", fieldtype="Datetime", insert_after="sla_delivery_by"),
         ],
         "Project": [
             dict(fieldname="repair_order", label="Repair Order", fieldtype="Link", options="Repair Order", insert_after="cost_center", hidden=1),

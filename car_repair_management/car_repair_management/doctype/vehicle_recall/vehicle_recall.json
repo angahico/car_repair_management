@@ -1,0 +1,171 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2026-02-14 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "title",
+  "manufacturer",
+  "affected_models",
+  "affected_years",
+  "issue_type",
+  "column_break_basic",
+  "status",
+  "priority",
+  "recall_start_date",
+  "deadline",
+  "external_reference",
+  "section_description",
+  "description",
+  "section_compliance",
+  "vehicles_affected",
+  "vehicles_completed",
+  "compliance_pct",
+  "notes"
+ ],
+ "fields": [
+  {
+   "default": "VR-.YYYY.-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "VR-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "manufacturer",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Manufacturer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "affected_models",
+   "fieldtype": "Data",
+   "label": "Affected Models"
+  },
+  {
+   "fieldname": "affected_years",
+   "fieldtype": "Data",
+   "label": "Affected Years"
+  },
+  {
+   "fieldname": "issue_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Issue Type",
+   "options": "\nSafety\nEmissions\nMechanical\nElectrical\nSoftware\nOther"
+  },
+  {
+   "fieldname": "column_break_basic",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Active\nIn Progress\nCompleted\nCancelled",
+   "reqd": 1
+  },
+  {
+   "default": "Medium",
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "label": "Priority",
+   "options": "Low\nMedium\nHigh\nCritical"
+  },
+  {
+   "fieldname": "recall_start_date",
+   "fieldtype": "Date",
+   "label": "Recall Start Date"
+  },
+  {
+   "fieldname": "deadline",
+   "fieldtype": "Date",
+   "label": "Deadline"
+  },
+  {
+   "fieldname": "external_reference",
+   "fieldtype": "Data",
+   "label": "External Reference"
+  },
+  {
+   "fieldname": "section_description",
+   "fieldtype": "Section Break",
+   "label": "Description"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "section_compliance",
+   "fieldtype": "Section Break",
+   "label": "Compliance"
+  },
+  {
+   "default": "0",
+   "fieldname": "vehicles_affected",
+   "fieldtype": "Int",
+   "label": "Vehicles Affected",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "vehicles_completed",
+   "fieldtype": "Int",
+   "label": "Vehicles Completed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "compliance_pct",
+   "fieldtype": "Percent",
+   "label": "Compliance %",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-02-14 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Car Repair Management",
+ "name": "Vehicle Recall",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "System Manager",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "All"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -17,3 +17,26 @@ def update_job_costing_snapshots():
         doc.other_charges = ro.other_charges
         doc.margin_snapshot = 0
         doc.save(ignore_permissions=True)
+
+
+def execute_scheduled_reports():
+	"""Execute any scheduled reports that are due."""
+	from frappe.utils import now_datetime, getdate, nowdate, add_days
+
+	now = now_datetime()
+	schedules = frappe.get_all("Workshop Report Schedule",
+		filters={"enabled": 1, "next_run": ["<=", now]},
+		fields=["name"])
+
+	for sched in schedules:
+		try:
+			from car_repair_management.api.reports import run_report_now
+			run_report_now(sched.name)
+		except Exception as e:
+			frappe.log_error(f"Scheduled report execution failed for {sched.name}: {e}")
+			try:
+				doc = frappe.get_doc("Workshop Report Schedule", sched.name)
+				doc.last_status = "Failed"
+				doc.save(ignore_permissions=True)
+			except Exception:
+				pass

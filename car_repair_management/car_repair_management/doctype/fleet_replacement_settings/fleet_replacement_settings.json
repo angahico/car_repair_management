@@ -1,0 +1,223 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-02-12 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "thresholds_section",
+  "age_threshold",
+  "mileage_threshold",
+  "cost_to_value_ratio_threshold",
+  "column_break_thresholds",
+  "downtime_threshold",
+  "maintenance_frequency_threshold",
+  "weights_section",
+  "weight_age",
+  "weight_mileage",
+  "weight_cost_ratio",
+  "column_break_weights",
+  "weight_downtime",
+  "weight_maintenance_frequency",
+  "total_weight",
+  "recommendation_section",
+  "keep_max_score",
+  "column_break_recommendation",
+  "monitor_max_score",
+  "scoring_info_section",
+  "scoring_formula_html"
+ ],
+ "fields": [
+  {
+   "fieldname": "thresholds_section",
+   "fieldtype": "Section Break",
+   "label": "Replacement Thresholds",
+   "description": "Vehicles reaching these thresholds contribute to their replacement score. Each metric is scored 0-100 based on how close the vehicle is to its threshold."
+  },
+  {
+   "fieldname": "age_threshold",
+   "fieldtype": "Int",
+   "label": "Age Threshold (Years)",
+   "default": "8",
+   "reqd": 1,
+   "description": "Maximum recommended vehicle age in years. Vehicles at or above this age score 100% on the age metric."
+  },
+  {
+   "fieldname": "mileage_threshold",
+   "fieldtype": "Int",
+   "label": "Mileage Threshold (KM)",
+   "default": "200000",
+   "reqd": 1,
+   "description": "Maximum recommended odometer reading in kilometers."
+  },
+  {
+   "fieldname": "cost_to_value_ratio_threshold",
+   "fieldtype": "Float",
+   "label": "Cost-to-Value Ratio Threshold",
+   "default": "0.5",
+   "reqd": 1,
+   "precision": "2",
+   "description": "When total lifetime repair cost divided by vehicle book value exceeds this ratio, the vehicle scores 100% on this metric. Example: 0.5 means replacement is flagged when repair costs reach 50% of value."
+  },
+  {
+   "fieldname": "column_break_thresholds",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "downtime_threshold",
+   "fieldtype": "Int",
+   "label": "Downtime Threshold (Days/Year)",
+   "default": "30",
+   "reqd": 1,
+   "description": "Maximum acceptable downtime days in the last 12 months."
+  },
+  {
+   "fieldname": "maintenance_frequency_threshold",
+   "fieldtype": "Int",
+   "label": "Maintenance Frequency Threshold",
+   "default": "6",
+   "reqd": 1,
+   "description": "Maximum acceptable number of repair orders in the last 12 months."
+  },
+  {
+   "fieldname": "weights_section",
+   "fieldtype": "Section Break",
+   "label": "Scoring Weights",
+   "description": "How much each metric contributes to the final replacement score (0-100). Weights must sum to 100."
+  },
+  {
+   "fieldname": "weight_age",
+   "fieldtype": "Int",
+   "label": "Age Weight (%)",
+   "default": "20",
+   "reqd": 1,
+   "description": "Contribution of vehicle age to the replacement score."
+  },
+  {
+   "fieldname": "weight_mileage",
+   "fieldtype": "Int",
+   "label": "Mileage Weight (%)",
+   "default": "20",
+   "reqd": 1,
+   "description": "Contribution of odometer reading to the replacement score."
+  },
+  {
+   "fieldname": "weight_cost_ratio",
+   "fieldtype": "Int",
+   "label": "Cost Ratio Weight (%)",
+   "default": "25",
+   "reqd": 1,
+   "description": "Contribution of cost-to-value ratio to the replacement score."
+  },
+  {
+   "fieldname": "column_break_weights",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "weight_downtime",
+   "fieldtype": "Int",
+   "label": "Downtime Weight (%)",
+   "default": "20",
+   "reqd": 1,
+   "description": "Contribution of downtime days to the replacement score."
+  },
+  {
+   "fieldname": "weight_maintenance_frequency",
+   "fieldtype": "Int",
+   "label": "Maintenance Frequency Weight (%)",
+   "default": "15",
+   "reqd": 1,
+   "description": "Contribution of repair order count to the replacement score."
+  },
+  {
+   "fieldname": "total_weight",
+   "fieldtype": "Int",
+   "label": "Total Weight",
+   "read_only": 1,
+   "description": "Auto-calculated. Must equal 100.",
+   "bold": 1
+  },
+  {
+   "fieldname": "recommendation_section",
+   "fieldtype": "Section Break",
+   "label": "Recommendation Thresholds",
+   "description": "Score boundaries that determine the recommendation label. Scores are 0-100."
+  },
+  {
+   "fieldname": "keep_max_score",
+   "fieldtype": "Int",
+   "label": "Keep — Max Score",
+   "default": "40",
+   "reqd": 1,
+   "description": "Vehicles scoring at or below this value are recommended to Keep."
+  },
+  {
+   "fieldname": "column_break_recommendation",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "monitor_max_score",
+   "fieldtype": "Int",
+   "label": "Monitor — Max Score",
+   "default": "70",
+   "reqd": 1,
+   "description": "Vehicles scoring above Keep threshold but at or below this value are recommended to Monitor. Above this value → Replace."
+  },
+  {
+   "fieldname": "scoring_info_section",
+   "fieldtype": "Section Break",
+   "label": "Scoring Formula",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "scoring_formula_html",
+   "fieldtype": "HTML",
+   "label": "Scoring Formula",
+   "options": "<div style=\"font-family: monospace; padding: 12px; background: var(--bg-light-gray); border-radius: 8px; line-height: 1.8;\">\n<p><strong>For each metric:</strong></p>\n<p style=\"margin-left: 16px;\">metric_score = min(100, (actual_value / threshold) × 100) × (weight / 100)</p>\n<br>\n<p><strong>Final Replacement Score:</strong></p>\n<p style=\"margin-left: 16px;\">score = age_score + mileage_score + cost_ratio_score + downtime_score + maintenance_freq_score</p>\n<br>\n<p><strong>Recommendation:</strong></p>\n<p style=\"margin-left: 16px;\">score ≤ Keep Max → <strong>Keep</strong></p>\n<p style=\"margin-left: 16px;\">score ≤ Monitor Max → <strong>Monitor</strong></p>\n<p style=\"margin-left: 16px;\">score > Monitor Max → <strong>Replace</strong></p>\n</div>"
+  }
+ ],
+ "hide_toolbar": 0,
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-02-12 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Car Repair Management",
+ "name": "Fleet Replacement Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 0,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 0,
+   "write": 1
+  },
+  {
+   "create": 0,
+   "delete": 0,
+   "email": 0,
+   "print": 1,
+   "read": 1,
+   "role": "Fleet Manager",
+   "share": 0,
+   "write": 1
+  },
+  {
+   "create": 0,
+   "delete": 0,
+   "email": 0,
+   "print": 0,
+   "read": 1,
+   "role": "All",
+   "share": 0,
+   "write": 0
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

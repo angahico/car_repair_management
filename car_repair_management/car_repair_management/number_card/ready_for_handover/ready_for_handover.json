@@ -1,5 +1,5 @@
 {
- "creation": "2025-10-04 12:59:30.191497",
+ "creation": "2026-03-11 17:06:37.623408",
  "currency": "USD",
  "docstatus": 0,
  "doctype": "Number Card",
@@ -10,12 +10,13 @@
  "is_public": 1,
  "is_standard": 1,
  "label": "Ready for Handover",
- "modified": "2025-10-04 12:59:30.191497",
+ "modified": "2026-03-11 17:06:37.623408",
  "modified_by": "Administrator",
  "module": "Car Repair Management",
  "name": "Ready for Handover",
  "owner": "Administrator",
  "report_function": "Sum",
+ "show_full_number": 0,
  "show_percentage_stats": 1,
  "stats_time_interval": "Daily",
  "type": "Document Type"

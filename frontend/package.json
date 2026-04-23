@@ -1,0 +1,37 @@
+{
+  "name": "car-repair-management-ui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --base=/assets/car_repair_management/frontend/",
+    "serve": "vite preview",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "date-fns": "^3.6.0",
+    "frappe-ui": "^0.1.248",
+    "leaflet": "^1.9.4",
+    "lucide-vue-next": "^0.469.0",
+    "pinia": "^2.1.7",
+    "recharts": "^2.15.0",
+    "socket.io-client": "^4.7.2",
+    "vue": "^3.5.13",
+    "vue-i18n": "9",
+    "vue-router": "^4.2.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.21",
+    "@types/node": "^20.19.4",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vitejs/plugin-vue-jsx": "^3.0.1",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.5",
+    "tailwindcss": "^3.4.15",
+    "typescript": "^5.8.3",
+    "vite": "^4.4.9",
+    "vue-tsc": "^2.1.0"
+  }
+}
