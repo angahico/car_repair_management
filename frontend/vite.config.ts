@@ -12,9 +12,14 @@ export default defineConfig(async () => {
       frappeProxy: true,
       lucideIcons: true,
       jinjaBootData: true,
-      buildConfig: {
-        indexHtmlPath: '../car_repair_management/www/workshop.html',
-      },
+      // Note: We intentionally do NOT set buildConfig.indexHtmlPath here.
+      // Letting Vite overwrite www/workshop.html bakes in the current
+      // hashed asset filenames, which then go stale on the next build
+      // (or on a fresh install where the committed workshop.html no
+      // longer matches the assets actually shipped/built). Instead, we
+      // keep workshop.html as a pure Jinja template and have workshop.py
+      // read the asset paths from the built public/frontend/index.html
+      // (or the Vite manifest) at request time. See www/workshop.py.
     })
   } catch (e) {
     console.warn('frappe-ui/vite not available:', e)
@@ -44,6 +49,10 @@ export default defineConfig(async () => {
       outDir: '../car_repair_management/public/frontend',
       emptyOutDir: true,
       sourcemap: true,
+      // Emit .vite/manifest.json so the server-side workshop.py can
+      // resolve the current hashed entry filenames at request time
+      // without depending on parsing index.html.
+      manifest: true,
     },
   }
 })

@@ -5,18 +5,38 @@
     <link rel="icon" type="image/svg+xml" href="/assets/car_repair_management/frontend/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Workshop - Car Repair Management</title>
-    <script type="module" crossorigin src="/assets/car_repair_management/frontend/assets/index-30a407de.js"></script>
-    <link rel="stylesheet" href="/assets/car_repair_management/frontend/assets/index-601ffd2e.css">
+    {%- if css_href %}
+    <link rel="stylesheet" href="{{ css_href }}">
+    {%- endif %}
+    {%- for href in (extra_css or []) %}
+    <link rel="stylesheet" href="{{ href }}">
+    {%- endfor %}
+    {%- if js_src %}
+    <script type="module" crossorigin src="{{ js_src }}"></script>
+    {%- endif %}
   </head>
   <body>
     <div id="app"></div>
-    
-  
-          <script>
-              {% for key in boot %}
-              window["{{ key }}"] = {{ boot[key] | tojson }};
-              {% endfor %}
-          </script>
-          </body>
-          
+
+    {%- if assets_missing %}
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 640px; margin: 80px auto; padding: 24px; border: 1px solid #f0c36d; background: #fdf6e3; border-radius: 8px; color: #5a3e00;">
+      <h2 style="margin-top: 0;">Workshop frontend assets are not built</h2>
+      <p>The Vite build output was not found in
+        <code>car_repair_management/public/frontend/</code>.
+      </p>
+      <p>Build the frontend and refresh:</p>
+      <pre style="background: #fffbe6; padding: 12px; border-radius: 4px; overflow: auto;">cd apps/car_repair_management/frontend
+yarn install
+yarn build
+bench build --app car_repair_management
+bench --site &lt;your-site&gt; clear-cache</pre>
+    </div>
+    {%- endif %}
+
+    <script>
+      {% for key in boot %}
+      window["{{ key }}"] = {{ boot[key] | tojson }};
+      {% endfor %}
+    </script>
+  </body>
 </html>
