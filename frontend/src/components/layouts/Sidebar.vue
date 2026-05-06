@@ -314,5 +314,33 @@ function handleSimpleNavClick() {
         <LucideChevronRight v-else class="size-5" />
       </button>
     </div>
+
+    <!-- Credit footer -->
+    <div
+      v-if="!isCollapsed"
+      class="px-3 py-3 border-t text-center space-y-1"
+      style="border-color: var(--border-color);"
+    >
+      <p class="text-xs" style="color: var(--text-muted);">
+        Developed by
+        <a
+          href="https://natnaeltilaye.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-medium hover:underline"
+          style="color: var(--accent);"
+        >Natnael Tilaye</a>
+      </p>
+      <p class="text-xs" style="color: var(--text-muted);">
+        Powered by
+        <a
+          href="https://selfmadecs.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-medium hover:underline"
+          style="color: var(--accent);"
+        >SelfmadeERP</a>
+      </p>
+    </div>
   </aside>
 </template>
